@@ -65,6 +65,17 @@ app.get('/users/:id', (req, res) => {
 
 });
 
+app.post('/users', (req, res) => {
+    const userToAdd = req.body;
+    addUser(userToAdd);
+    res.status(200).end();
+});
+
+function addUser(user){
+    users['users_list'].push(user);
+}
+
+
 function findUserById(id){
     return users['users_list'].find((user) => user['id'] === id);
     // ^ or return users['users_list'].filter((user) => user['id'] === id);
