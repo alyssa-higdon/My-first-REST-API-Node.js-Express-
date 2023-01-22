@@ -4,6 +4,7 @@ const app = express();
 
 const port = 5000;
 
+
 const users = { 
     users_list :
     [
@@ -86,6 +87,7 @@ function findUserById(id) {
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
+    userToAdd.id = Date.now();
     addUser(userToAdd);
     res.status(201).end();
 });
