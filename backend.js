@@ -43,10 +43,21 @@ app.get('/', (req, res) => {
 
 app.get('/users', (req, res) => {
     const name = req.query.name;
+    const job = req.query.job;
+    if (name != undefined && job != undefined){
+        let result = findUserByName(name);
+        let result1 = findUserByJob(result, job);
+
+        result1 = {users_list: result1};
+        res.send(result1);
+    }
     if (name != undefined){
         let result = findUserByName(name);
-        
-        let resule1 = findUserByJob(job);
+        result = {users_list: result};
+        res.send(result);
+    }
+    if (job != undefined){
+        let result = findUserByJob(users['users_list'], job);
         result = {users_list: result};
         res.send(result);
     }
@@ -98,6 +109,10 @@ const findUserByName = (name) => {
     return users['users_list'].filter( (user) => user['name'] === name); 
 }
 
+const findUserByJob = (list, job) => { 
+    return list.filter( (user) => user['job'] === job); 
+}
+
 
 app.listen(port, () => {
     console.log('Example app listening at http://localhost:${port}');
@@ -105,23 +120,20 @@ app.listen(port, () => {
 
 
 
-app.get('/users/:name/:job', (req, res) => {
-    const name = req.query.name;
-    const job = req.query.job;
-    if (name != undefined){
-        let result = findUserByName(name);
-        console.log(result);
-        let finalResult = findUserByJob(result, job);
-        console.log(finalResult);
+// app.get('/users/:name/:job', (req, res) => {
+//     const name = req.query.name;
+//     const job = req.query.job;
+//     if (name != undefined){
+//         let result = findUserByName(name);
+//         console.log(result);
+//         let finalResult = findUserByJob(result, job);
+//         console.log(finalResult);
 
-        finalResult = {users_list: finalResult};
-        res.send(finalResult);
-    }
-    else{
-        res.send(users);
-    }
-});
+//         finalResult = {users_list: finalResult};
+//         res.send(finalResult);
+//     }
+//     else{
+//         res.send(users);
+//     }
+// });
 
-const findUserByJob = (list, job) => { 
-    return list.filter( (user) => user['job'] === job); 
-}
