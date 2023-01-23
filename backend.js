@@ -89,11 +89,8 @@ app.post('/users', (req, res) => {
     const userToAdd = req.body;
     userToAdd.id = Date.now();
     addUser(userToAdd);
-    //res.status(201).end();
     res.status(201).send(userToAdd).end();
-    //res.status(200).send(userToAdd);
-    //res.status(200).send(userToAdd);
-    //return userToAdd;
+    
 });
 
 function addUser(user){
@@ -102,17 +99,27 @@ function addUser(user){
 
 app.delete('/users/:id', (req, res) => {
     const id = req.params.id;
-    deleteUser(id);;
-    res.status(200).end();
+    console.log("id in delete: " + id);
+    if (deleteUser(id) == 0){
+        console.log("hello");
+        res.status(204).end();
+    }
+    else{
+        res.status(404).end();
+    }
 })
 
 function deleteUser(id){
     const user_index = users['users_list'].findIndex( (user) => user['id'] === id);
-    if (user_index > -1)
-        users['users_list'].splice(user_index, 1);
+    console.log("id: " + id);
+    console.log("user_index: " + user_index);
+    if (user_index > -1 && user_index != undefined){
+        users['users_list'] = users['users_list'].splice(user_index, 1);
+        console.log(users['users_list']);
     }
-
-
+        return 0;
+}
+    
 const findUserByName = (name) => { 
     return users['users_list'].filter( (user) => user['name'] === name); 
 }
@@ -125,23 +132,4 @@ const findUserByJob = (list, job) => {
 app.listen(port, () => {
     console.log('Example app listening at http://localhost:${port}');
 });
-
-
-
-// app.get('/users/:name/:job', (req, res) => {
-//     const name = req.query.name;
-//     const job = req.query.job;
-//     if (name != undefined){
-//         let result = findUserByName(name);
-//         console.log(result);
-//         let finalResult = findUserByJob(result, job);
-//         console.log(finalResult);
-
-//         finalResult = {users_list: finalResult};
-//         res.send(finalResult);
-//     }
-//     else{
-//         res.send(users);
-//     }
-// });
 
