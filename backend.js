@@ -99,9 +99,7 @@ function addUser(user){
 
 app.delete('/users/:id', (req, res) => {
     const id = req.params.id;
-    console.log("id in delete: " + id);
     if (deleteUser(id) == 0){
-        console.log("hello");
         res.status(204).end();
     }
     else{
@@ -111,11 +109,8 @@ app.delete('/users/:id', (req, res) => {
 
 function deleteUser(id){
     const user_index = users['users_list'].findIndex( (user) => user['id'] === id);
-    console.log("id: " + id);
-    console.log("user_index: " + user_index);
     if (user_index > -1 && user_index != undefined && user_index.length !== 0){
         users['users_list'].splice(user_index, 1);
-        console.log(users['users_list']);
         return 0;
     }
     return -1;
